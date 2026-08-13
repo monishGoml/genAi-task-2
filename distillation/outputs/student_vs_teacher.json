@@ -1,0 +1,60 @@
+{
+  "summary": {
+    "teacher_total_params": 760547328,
+    "student_total_params": 750979072,
+    "param_reduction_pct": 1.3,
+    "avg_teacher_rouge_l": 0.209,
+    "avg_student_rouge_l": 0.254,
+    "quality_gap": -0.045,
+    "avg_teacher_latency_s": 1.146,
+    "avg_student_latency_s": 0.815,
+    "speedup_x": 1.41
+  },
+  "examples": [
+    {
+      "prompt": "Can you make a cake for someone with a severe egg allergy?",
+      "teacher_answer": "Our cakes are made with egg-free flours like almond flour, coconut flour, or rice flour. We can also provide gluten-free options using rice flour or almond flour. Please let us know your specific allergy needs.",
+      "teacher_rouge_l": 0.208,
+      "teacher_latency_s": 3.249,
+      "student_answer": "We can make a cake for someone with a severe egg allergy by using alternative egg replacers, such as flaxseed, chia seeds, or applesauce. Please notify us when ordering, so we can prepare the cake accordingly.",
+      "student_rouge_l": 0.184,
+      "student_latency_s": 1.593
+    },
+    {
+      "prompt": "How early do I need to book a three-tier wedding cake?",
+      "teacher_answer": "We typically book three-tier wedding cakes 4-6 months in advance.",
+      "teacher_rouge_l": 0.311,
+      "teacher_latency_s": 0.548,
+      "student_answer": "We book three-tier wedding cakes 12 weeks in advance.",
+      "student_rouge_l": 0.326,
+      "student_latency_s": 0.414
+    },
+    {
+      "prompt": "What's the smallest cake size you offer?",
+      "teacher_answer": "Our smallest cake is 6 inches.",
+      "teacher_rouge_l": 0.25,
+      "teacher_latency_s": 0.335,
+      "student_answer": "We offer cake sizes from 1 to 4.",
+      "student_rouge_l": 0.118,
+      "student_latency_s": 0.375
+    },
+    {
+      "prompt": "Do you deliver outside a 10 mile radius?",
+      "teacher_answer": "We do deliver outside a 10-mile radius, but delivery areas vary.",
+      "teacher_rouge_l": 0.093,
+      "teacher_latency_s": 0.566,
+      "student_answer": "We do offer delivery outside of our 10-mile radius for an additional $15.",
+      "student_rouge_l": 0.222,
+      "student_latency_s": 0.687
+    },
+    {
+      "prompt": "Is your buttercream made with real butter?",
+      "teacher_answer": "Yes, our buttercream is made with real butter. We use high-quality ingredients to ensure the best taste.",
+      "teacher_rouge_l": 0.182,
+      "teacher_latency_s": 1.031,
+      "student_answer": "Yes, we use real butter in our buttercream frosting. It adds a rich, creamy texture and flavor.",
+      "student_rouge_l": 0.419,
+      "student_latency_s": 1.008
+    }
+  ]
+}

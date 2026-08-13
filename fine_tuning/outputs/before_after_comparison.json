@@ -1,0 +1,42 @@
+[
+  {
+    "prompt": "Can you make a cake for someone with a severe egg allergy?",
+    "base_answer": "We can definitely make a cake for someone with a severe egg allergy. We take all our cakes and ingredients to a separate facility to ensure the highest level of safety and preparation. To make sure the cake is egg-free, we would need to use a different type of leavening agent, such as baking powder or baking soda. We'll also need to use egg-free chocolate chips or other ingredients to ensure the cake meets all safety standards. Would you like me to recommend a different cake option or would you like to place an order for someone with a severe egg allergy?",
+    "fine_tuned_answer": "We can make a cake for someone with a severe egg allergy using flours that are free from eggs, such as almond flour, coconut flour, or rice flour.",
+    "reference": "Yes, our vegan cakes are fully egg-free and made with flax eggs instead, so they're a safe choice for an egg allergy. Please flag the allergy at checkout so our kitchen keeps it separate from egg-based batters.",
+    "base_rouge_l": 0.124,
+    "fine_tuned_rouge_l": 0.206
+  },
+  {
+    "prompt": "How early do I need to book a three-tier wedding cake?",
+    "base_answer": "We understand the importance of planning your special day. For a three-tier wedding cake, we recommend booking at least 4-6 weeks in advance to ensure we can accommodate your order. This will give us enough time to prepare and bake the perfect cake for your celebration. We also offer same-day orders, but please be aware that this may incur an additional fee.",
+    "fine_tuned_answer": "We book three-tier cakes at least 6-8 weeks in advance.",
+    "reference": "For a three-tier wedding cake, we recommend booking at least 6-8 weeks in advance, especially during busy wedding season. That gives us time to schedule a tasting and finalize your design.",
+    "base_rouge_l": 0.429,
+    "fine_tuned_rouge_l": 0.444
+  },
+  {
+    "prompt": "What's the smallest cake size you offer?",
+    "base_answer": "We have a delightful few options for our smallest cake sizes. Our 'Cupcake' cakes are perfect for special occasions or as a sweet treat on their own. We offer 6-inch, 8-inch, and 10-inch cupcakes for a delightful taste experience. Each cupcake is carefully baked and decorated to ensure it's as delicious as it is adorable!",
+    "fine_tuned_answer": "Our smallest cake size is 1/4 cup.",
+    "reference": "Our smallest option is the 4-inch personal cake, which serves 1-2 people and comes in all our everyday flavors — great for a small celebration.",
+    "base_rouge_l": 0.141,
+    "fine_tuned_rouge_l": 0.235
+  },
+  {
+    "prompt": "Do you deliver outside a 10 mile radius?",
+    "base_answer": "We're happy to deliver to you within a 10-mile radius. However, if you're outside of our delivery zone, please don't worry. We'll still be happy to help with your order. You can also track your delivery in real-time once it's shipped out to you. Would you like some help with ordering or would you like to place an order instead?",
+    "fine_tuned_answer": "Yes, we deliver within a 10-mile radius.",
+    "reference": "Standard local delivery covers up to 10 miles from the shop; for anything further, reach out directly and we'll see if we can arrange something special for an extra fee.",
+    "base_rouge_l": 0.143,
+    "fine_tuned_rouge_l": 0.103
+  },
+  {
+    "prompt": "Is your buttercream made with real butter?",
+    "base_answer": "We're glad you asked. Yes, our buttercream is made with real butter. We believe that using high-quality ingredients, like real butter, gives our baked goods a richer and more authentic taste. It's a small detail, but one that we think makes a big difference in the end. Our buttercream is also free from any artificial preservatives or flavors.",
+    "fine_tuned_answer": "Yes, our buttercream is made with real butter.",
+    "reference": "Yes, we always use real butter in our classic buttercream for the richest flavor, though we also offer a dairy-free coconut-cream version on request.",
+    "base_rouge_l": 0.23,
+    "fine_tuned_rouge_l": 0.176
+  }
+]

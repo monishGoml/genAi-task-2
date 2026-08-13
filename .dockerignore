@@ -1,0 +1,27 @@
+.git
+.gitignore
+
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+
+.ipynb_checkpoints
+
+# Unsloth generated caches
+**/unsloth_compiled_cache/
+**/huggingface_tokenizers_cache/
+
+# Training checkpoints
+fine_tuning/outputs/checkpoints/
+
+# Distillation artifacts not required by LLMOps
+distillation/
+
+# Dataset files are not required by the API
+data/
+
+# Documentation not required inside the image
+README.md
+fine_tuning/README.md
+llmops/README.md
