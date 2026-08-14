@@ -313,6 +313,3 @@ Natural next steps for turning this into a more production-grade system:
 - Wire `eval.py` into a CI/CD pipeline (e.g. GitHub Actions) as a merge/deploy gate.
 - Expand the evaluation set and add additional metrics beyond ROUGE-L (e.g. BLEU, embedding similarity, human eval).
 
-## License
-
-Add your preferred license here (e.g. MIT) if this repository is intended for public/open-source use.
