@@ -16,6 +16,8 @@ A complete, end-to-end workflow for taking a base Large Language Model from adap
 - [Act 1 — Fine-Tuning](#act-1--fine-tuning)
 - [Act 2 — Distillation](#act-2--distillation)
 - [Act 3 — LLM Ops](#act-3--llm-ops)
+- [Docker](#docker)
+- [Evaluation Results](#evaluation-results)
 - [Generated Artifacts](#generated-artifacts)
 - [Configuration](#configuration)
 - [Troubleshooting](#troubleshooting)
@@ -88,7 +90,7 @@ Each act builds on the previous one's output, so the pipeline can be run start-t
 │   ├── Dockerfile
 │   ├── requirements.txt
 │   ├── outputs/
-│   │   └── eval_results.json
+│   │   └── eval_gate_result.json
 │   └── README.md
 ├── data/
 │   └── (sample dataset for training / evaluation)
@@ -182,6 +184,83 @@ python eval.py --threshold 0.20 --max-latency 15
 
 📄 Full instructions: [`llmops/README.md`](./llmops/README.md)
 
+## Docker
+
+The `llmops/` service can be built and run as a standalone container so the API doesn't depend on the host's Python environment.
+
+**Build the image:**
+
+```bash
+cd llmops
+docker build -t bakery-llm-api .
+```
+
+**Run the container** (maps container port 8000 to the host):
+
+```bash
+docker run -p 8000:8000 \
+  -e MODEL_PATH="/app/fine_tuning/outputs/lora-adapter" \
+  bakery-llm-api
+```
+
+**Test the running container:**
+
+```bash
+curl -X POST http://localhost:8000/generate \
+     -H "Content-Type: application/json" \
+     -d '{"prompt": "Do you have any gluten-free cakes?"}'
+```
+
+> `MODEL_PATH` inside the container must match the path where model artifacts are copied to in the Dockerfile (`/app/fine_tuning/outputs/lora-adapter`) — this is different from the relative path (`../fine_tuning/outputs/lora-adapter`) used when running locally outside Docker.
+
+## Evaluation Results
+
+The model is evaluated at each stage using **ROUGE-L** (quality) and **response latency** (speed) on a fixed set of customer-support prompts. Three separate evaluation runs exist in this repo, each over its own prompt set and comparison — the numbers below are pulled directly from the corresponding JSON artifacts, so they won't perfectly reconcile with each other stage-to-stage.
+
+### 1. Fine-Tuning — Base vs. Fine-Tuned (`fine_tuning/outputs/before_after_comparison.json`)
+
+| Stage | Avg ROUGE-L |
+|---|---|
+| Base model | 0.213 |
+| Fine-tuned model | 0.233 |
+
+The fine-tuned model produces noticeably shorter, more direct answers (e.g. "Our smallest cake size is 1/4 cup." vs. a long base-model tangent about cupcake sizes), which improves ROUGE-L overlap with the reference answers on most prompts, though not uniformly across all five.
+
+### 2. Distillation — Teacher vs. Student (`distillation/outputs/student_vs_teacher.json`)
+
+| Metric | Teacher | Student |
+|---|---|---|
+| Total parameters | 760,547,328 | 750,979,072 |
+| Avg ROUGE-L | 0.209 | 0.254 |
+| Avg latency (s) | 1.146 | 0.815 |
+
+- **Parameter reduction:** 1.3%
+- **Speedup:** 1.41x faster inference
+- **Quality gap:** -0.045 (student ROUGE-L is *higher* on this eval set — the student is not strictly worse on quality here, while being meaningfully faster)
+
+### 3. LLM Ops — Automated Evaluation Gate (`llmops/outputs/eval_gate_result.json`)
+
+```json
+{
+  "model_path": "../fine_tuning/outputs/lora-adapter",
+  "avg_rouge_l": 0.217,
+  "avg_latency_s": 1.317,
+  "threshold": 0.2,
+  "max_latency": 15.0,
+  "passed": true
+}
+```
+
+| Check | Result | Threshold | Status |
+|---|---|---|---|
+| ROUGE-L | 0.217 | ≥ 0.20 | ✅ Pass |
+| Latency | 1.317s | ≤ 15.0s | ✅ Pass |
+| **Gate** | — | — | **✅ PASS** |
+
+This is the deployment gate: `eval.py` exits `0` here, so a CI/CD pipeline would allow this model to be promoted.
+
+**Takeaway:** Fine-tuning improves response quality and conciseness over the base model. Distillation then trades a small (in this case, favorable) change in ROUGE-L for a real ~1.4x latency improvement and a lighter model — a reasonable trade-off for deployment. The LLM Ops eval gate confirms the served model clears both the quality and latency bars before being considered deployment-ready.
+
 ## Generated Artifacts
 
 Running all three acts end-to-end produces the following:
@@ -192,7 +271,7 @@ Running all three acts end-to-end produces the following:
 | Base vs. Fine-Tuned Comparison | `fine_tuning/outputs/before_after_comparison.json` | Side-by-side responses + ROUGE-L scores. |
 | Distilled Student Model | `distillation/outputs/student-model/` | Smaller, deployment-ready model. |
 | Student vs. Teacher Comparison | `distillation/outputs/student_vs_teacher.json` | Efficiency gains and quality trade-offs. |
-| LLM Ops Evaluation Results | `llmops/outputs/eval_results.json` | ROUGE-L, latency, and pass/fail status from the eval gate. |
+| LLM Ops Evaluation Gate Results | `llmops/outputs/eval_gate_result.json` | ROUGE-L, latency, and pass/fail status from the eval gate. |
 
 ## Configuration
 
@@ -214,7 +293,7 @@ Command-line flags of note:
 - **Out of memory during fine-tuning/distillation**: reduce batch size in `train_lora.py` / `distill.py`, or run on a machine with a larger GPU / more system RAM.
 - **`uvicorn` command not found**: make sure you've run `pip install -r requirements.txt` inside `llmops/` (it's not included in the root requirements).
 - **API returns errors / model not found**: double-check `MODEL_PATH` points to a valid adapter/model directory — this differs between local runs (`../fine_tuning/outputs/lora-adapter`) and the Docker container (`/app/fine_tuning/outputs/lora-adapter`).
-- **`eval.py` fails the gate**: inspect `llmops/outputs/eval_results.json` for per-prompt ROUGE-L/latency values to see which threshold was missed.
+- **`eval.py` fails the gate**: inspect `llmops/outputs/eval_gate_result.json` for per-prompt ROUGE-L/latency values to see which threshold was missed.
 
 ## Deliberately Excluded Features
 
@@ -234,3 +313,6 @@ Natural next steps for turning this into a more production-grade system:
 - Wire `eval.py` into a CI/CD pipeline (e.g. GitHub Actions) as a merge/deploy gate.
 - Expand the evaluation set and add additional metrics beyond ROUGE-L (e.g. BLEU, embedding similarity, human eval).
 
+## License
+
+Add your preferred license here (e.g. MIT) if this repository is intended for public/open-source use.
