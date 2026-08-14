@@ -75,7 +75,20 @@ python eval.py --threshold 0.20 --max-latency 15
 
 **Output:** The script will print evaluation metrics and indicate `PASS` or `FAIL` based on the specified thresholds. An exit code (`0` for pass, `1` for fail) is returned, making it suitable for CI/CD integration.
 
-Evaluation results are saved to `./outputs/eval_results.json`.
+Evaluation results are saved to `./outputs/eval_gate_result.json`.
+
+**Example output (real run against the fine-tuned LoRA adapter):**
+
+```json
+{
+  "model_path": "../fine_tuning/outputs/lora-adapter",
+  "avg_rouge_l": 0.217,
+  "avg_latency_s": 1.317,
+  "threshold": 0.2,
+  "max_latency": 15.0,
+  "passed": true
+}
+```
 
 ## Outputs and Artifacts
 
@@ -84,7 +97,7 @@ Evaluation results are saved to `./outputs/eval_results.json`.
 | `app.py` | The FastAPI application that provides the `/generate` endpoint. |
 | `eval.py` | The script for automated quality evaluation. |
 | `Dockerfile` | For containerizing the API. |
-| `outputs/eval_results.json` | JSON file containing the evaluation summary, including ROUGE-L, latency, and pass/fail status. |
+| `outputs/eval_gate_result.json` | JSON file containing the evaluation summary, including ROUGE-L, latency, and pass/fail status. |
 
 ## Extending the Project
 
